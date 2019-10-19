@@ -3,6 +3,8 @@ import socketIOClient from "socket.io-client";
 import { usePosition } from "../../hooks/usePosition";
 import { useSelector, useDispatch } from "react-redux";
 import Types from "../../store/crimes/types";
+import Map from '../../components/Map'
+import { CrimeList } from './components/CrimeList';
 
 export const MapView = () => {
   const BASE_URL = process.env.NODE_ENV === 'production'? 'https://crimemap-apiv2.herokuapp.com/api' : 'http://localhost:5009/api'
@@ -32,13 +34,9 @@ export const MapView = () => {
       {dangerAlertCrimes.length > 0 && <div>Danger</div>}
       {!dangerAlertCrimes.length && (
         <header className="App-header">
-          Current Location: {latitude + " , " + longitude}
-          <br />
-          Crimes within 10km of current locations:{" "}
+          <Map center={{ latitude, longitude }} />
           {crimes.map(crime => (
-            <div>
-              <h2>Type: {crime.type}</h2>
-            </div>
+            <CrimeList crime={crime} key={crime._id}/>
           ))}
         </header>
       )}
