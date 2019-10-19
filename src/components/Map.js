@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Geocode from 'react-geocode'
-import { Map, Marker, GoogleApiWrapper, GoogleAPI } from 'google-maps-react'
-import { googleKey } from '../config'
-import styled from 'styled-components'
-import { Card, CardContent } from 'semantic-ui-react'
+import React, { useEffect, useState } from "react";
+import Geocode from "react-geocode";
+import { Map, Marker, GoogleApiWrapper, Circle } from "google-maps-react";
+import { googleKey } from "../config";
+import styled from "styled-components";
+import { Card, CardContent } from "semantic-ui-react";
 
-
-const MapViewComponent = ({
-  state,
-  google,
-  center
-}) => {
+const MapViewComponent = ({ state, google, center }) => {
   // const [latlng, setLatLng] = useState(null)
   // useEffect(() => {
   //   Geocode.setApiKey(googleKey)
@@ -42,37 +37,48 @@ const MapViewComponent = ({
   return (
     <CardView className="map" data-testid="map-view">
       <CardContentWrapper>
-      
-          <MapViewWrapper data-testid="display-map">
-            <MapViewDiv>
-              <Map
-                google={google}
-                zoom={7}
-                initialCenter={{ lat: latitude, lng: longitude}}
-                center={{ lat: latitude, lng: longitude}}
-              >
-                <Marker position={{ lat: latitude, lng: longitude}} />
-              </Map>
-            </MapViewDiv>
-          </MapViewWrapper>
+        <MapViewWrapper data-testid="display-map">
+          <MapViewDiv>
+            <Map
+              google={google}
+              zoom={14}
+              initialCenter={{ lat: latitude, lng: longitude }}
+              center={{ lat: latitude, lng: longitude }}
+            >
+              <Marker position={{ lat: latitude, lng: longitude }} />
+              {/* <Circle
+                defaultCenter={{
+                  lat: latitude,
+                  lng: longitude
+                }}
+                radius={10}
+                strokeColor="#0000FF"
+                strokeOpacity={0.2}
+                strokeWeight={1}
+                fillColor="#0000FF"
+                fillOpacity={0.1}
+                editable={true}
+                draggable={true}
+              /> */}
+            </Map>
+          </MapViewDiv>
+        </MapViewWrapper>
         )}
-
       </CardContentWrapper>
     </CardView>
-  )
-}
-
+  );
+};
 
 const CardContentWrapper = styled(CardContent)`
   &&&& {
     padding: 0;
   }
-`
+`;
 const MapViewDiv = styled.div`
   width: 100%;
   min-width: 300px;
   height: 300px;
-`
+`;
 
 const MapViewWrapper = styled.div`
 &&&& {
@@ -84,7 +90,7 @@ const MapViewWrapper = styled.div`
   width: 100%;
   display: table;
 }
-`
+`;
 
 const CardView = styled(Card)`
   &&&& {
@@ -92,7 +98,7 @@ const CardView = styled(Card)`
     min-width: 100%;
     height: 500px;
   }
-`
+`;
 export default GoogleApiWrapper({
   apiKey: googleKey
 })(MapViewComponent);
