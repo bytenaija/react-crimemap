@@ -12,11 +12,11 @@ export const MapView = () => {
 
   useEffect(() => {
     const socket = socketIOClient("http://localhost:5009");
-    // socket.emit("update-location", {
-    //   userId: "5da82087c3667279b8ff98c7",
-    //   longitude: longitude,
-    //   latitude: latitude
-    // });
+    socket.emit("update-location", {
+      userId: "5da82087c3667279b8ff98c7",
+      longitude: longitude,
+      latitude: latitude
+    });
 
     socket.on("alarm", data => {
       dispatch({ type: Types.ALERT_CRIME, payload: data.crimes });
