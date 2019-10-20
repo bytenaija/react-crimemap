@@ -1,18 +1,18 @@
-import { applyMiddleware, createStore } from "redux";
-import logger from "redux-logger";
-import { persistStore } from "redux-persist";
-import createSagaMiddleware from "redux-saga";
+import { applyMiddleware, createStore } from 'redux';
+import logger from 'redux-logger';
+import { persistStore } from 'redux-persist';
+import createSagaMiddleware from 'redux-saga';
 
-import rootSaga from "./rootSaga";
+import rootSaga from './rootSaga';
 
-import reducers from "./rootReducer";
+import reducers from './rootReducer';
 
 const saga = createSagaMiddleware();
 
 const middlewares = [];
 middlewares.push(saga);
 
-if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   middlewares.push(logger);
 }
 

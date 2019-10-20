@@ -1,39 +1,33 @@
-import React, { useEffect, useState } from "react";
-import Geocode from "react-geocode";
-import { Map, Marker, GoogleApiWrapper, Circle } from "google-maps-react";
-import { googleKey } from "../config";
-import styled from "styled-components";
-import { Card, CardContent } from "semantic-ui-react";
+import React, { useEffect, useState } from 'react';
+import Geocode from 'react-geocode';
+import {
+  Map, Marker, GoogleApiWrapper, InfoWindow,
+} from 'google-maps-react';
+import styled from 'styled-components';
+import { Card, CardContent } from 'semantic-ui-react';
+import { googleKey } from '../config';
 
-const MapViewComponent = ({ state, google, center }) => {
-  // const [latlng, setLatLng] = useState(null)
-  // useEffect(() => {
-  //   Geocode.setApiKey(googleKey)
-  //   if (state) {
-  //     Geocode.fromAddress(`${state}, ${country}`).then(
-  //       (response: any) => {
-  //         const { lat, lng } = response.results[0].geometry.location
+const MapViewComponent = ({ crimes, google, center }) => {
+  const [activeMarker, setActiveMarker] = useState(null);
+  const [infoWindowShow, setShowInfoWindow] = useState(false);
 
-  //         setLatLng({ lat, lng })
-  //       },
-  //       (error: any) => {
-  //         return
-  //       }
-  //     )
-  //   } else {
-  //     Geocode.fromAddress(`${country}`).then(
-  //       (response: any) => {
-  //         const { lat, lng } = response.results[0].geometry.location
+  const onMarkerClick = (props, marker) => {
+    setActiveMarker(marker);
+    setShowInfoWindow(true);
+  };
 
-  //         setLatLng({ lat, lng })
-  //       },
-  //       (error: any) => {
-  //         return
-  //       }
-  //     )
-  //   }
-  // }, [setLatLng, country, state])
-  const { latitude, longitude } = center;
+  const onInfoWindowClose = () => {
+    setActiveMarker(null);
+    setShowInfoWindow(false);
+  };
+
+  const onMapClicked = () => {
+    setActiveMarker(null);
+    setShowInfoWindow(false);
+  };
+
+  const { latitude = 3.873777773, longitude = 4.83737373 } = center;
+
   return (
     <CardView className="map" data-testid="map-view">
       <CardContentWrapper>
@@ -44,22 +38,35 @@ const MapViewComponent = ({ state, google, center }) => {
               zoom={14}
               initialCenter={{ lat: latitude, lng: longitude }}
               center={{ lat: latitude, lng: longitude }}
+              onClick={onMapClicked}
             >
               <Marker position={{ lat: latitude, lng: longitude }} />
-              {/* <Circle
-                defaultCenter={{
-                  lat: latitude,
-                  lng: longitude
-                }}
-                radius={10}
-                strokeColor="#0000FF"
-                strokeOpacity={0.2}
-                strokeWeight={1}
-                fillColor="#0000FF"
-                fillOpacity={0.1}
-                editable={true}
-                draggable={true}
-              /> */}
+
+              {crimes.map((crime) => (
+                <Marker
+                  key={crime._id}
+                  position={{
+                    lat: crime.location.coordinates[0],
+                    lng: crime.location.coordinates[1],
+                  }}
+                  type={crime.type}
+                  onClick={onMarkerClick}
+                >
+                  <InfoWindow
+                    marker={activeMarker}
+                    onClose={onInfoWindowClose}
+                    visible={infoWindowShow}
+                  >
+                    <div>
+                      <h2>{crime.type}</h2>
+
+                      <button type="button">Click Me</button>
+
+                      <div>{crime.type}</div>
+                    </div>
+                  </InfoWindow>
+                </Marker>
+              ))}
             </Map>
           </MapViewDiv>
         </MapViewWrapper>
@@ -100,5 +107,5 @@ const CardView = styled(Card)`
   }
 `;
 export default GoogleApiWrapper({
-  apiKey: googleKey
+  apiKey: googleKey,
 })(MapViewComponent);

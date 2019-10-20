@@ -1,12 +1,13 @@
-import DataTypes from "./types";
-
+import DataTypes from './types';
 
 const INITIAL_STATE = {
   crimes: [],
   dangerAlertCrimes: [],
   loading: false,
   error: undefined,
-  recentCrimes: []
+  recentCrimes: [],
+  addNewIncident: false,
+  success: false,
 };
 
 const crimeReducer = (state = INITIAL_STATE, action) => {
@@ -30,8 +31,22 @@ const crimeReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         recentCrimes: [...state.recentCrimes, action.payload],
-        crimes: [...state.crimes, action.payload]
+        crimes: [...state.crimes, action.payload],
       };
+
+    case DataTypes.ADD_CRIME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        crimes: [...state.crimes, action.payload],
+        success: true,
+      };
+
+    case DataTypes.SHOW_ADD_MODAL:
+      return { ...state, addNewIncident: true };
+
+    case DataTypes.CLOSE_ADD_MODAL:
+      return { ...state, addNewIncident: false };
 
     default:
       return state;

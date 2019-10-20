@@ -1,2 +1,3 @@
 import { MapView } from './MapView';
-export default MapView
+
+export default MapView;
