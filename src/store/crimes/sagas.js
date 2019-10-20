@@ -3,7 +3,9 @@ import axios from 'axios';
 import DataTypes from './types';
 import { constants } from '../../constants';
 
-const API_BASE_URL = process.env.STATE_DATA_API_URL || 'http://localhost:5009/api';
+const API_BASE_URL = process.env.NODE_ENV === 'production'
+  ? 'https://crimemap-apiv2.herokuapp.com/api'
+  : 'http://localhost:5009/api';
 
 export const fetchAllData = async () => {
   const response = await axios.get(`${API_BASE_URL}/crimes/`);

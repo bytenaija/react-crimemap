@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { useState, useEffect } from 'react';
 
 export const usePosition = () => {
@@ -5,7 +6,6 @@ export const usePosition = () => {
   const [error, setError] = useState(null);
 
   const onChange = ({ coords }) => {
-    console.log('dhdhdhdhdhhd', coords);
     setPosition({
       latitude: coords.latitude,
       longitude: coords.longitude,

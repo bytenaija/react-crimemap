@@ -11,19 +11,22 @@ import AddIncidentModal from '../../components/AddIncidentModal';
 
 export const MapView = () => {
   const BASE_URL = process.env.NODE_ENV === 'production'
-    ? 'https://crimemap-apiv2.herokuapp.com/api'
-    : 'http://localhost:5009/api';
+    ? 'https://crimemap-apiv2.herokuapp.com/'
+    : 'http://localhost:5009/';
   const crimes = useSelector((state) => state.Crimes.crimes);
+  const user = useSelector(state => state.User.user);
   const dangerAlertCrimes = useSelector(
     (state) => state.Crimes.dangerAlertCrimes,
   );
   const dispatch = useDispatch();
   const { latitude, longitude } = usePosition();
 
+  
   useEffect(() => {
+    console.log(latitude, longitude);
     const socket = socketIOClient(BASE_URL);
     socket.emit('update-location', {
-      userId: '5da82087c3667279b8ff98c7',
+      userId: user.id,
       longitude,
       latitude,
     });
@@ -33,18 +36,20 @@ export const MapView = () => {
     });
 
     dispatch({ type: Types.GET_CRIMES });
-  }, [dispatch, latitude, longitude]);
+  }, [latitude, longitude]);
 
   return (
     <MapviewWrapper>
       <Navbar />
       {dangerAlertCrimes.length > 0 && <div>Danger</div>}
       {!dangerAlertCrimes.length && (
-        <header className="App-header">
+        <header>
           <Map center={{ latitude, longitude }} crimes={crimes} />
-          {crimes.map((crime) => (
-            <CrimeList crime={crime} key={crime._id} />
-          ))}
+          <MapviewInnerWrapper>
+            {crimes.map((crime) => (
+              <CrimeList crime={crime} key={crime._id} />
+            ))}
+          </MapviewInnerWrapper>
         </header>
       )}
 
@@ -54,5 +59,8 @@ export const MapView = () => {
 };
 
 const MapviewWrapper = styled.div``;
+const MapviewInnerWrapper = styled.div`
+  padding: 1rem;
+`;
 
 export default MapView;

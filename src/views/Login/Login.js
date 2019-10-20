@@ -1,21 +1,23 @@
 /* eslint-disable import/prefer-default-export */
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { Form, Button, Icon, Input } from "semantic-ui-react";
-import { withRouter } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import Types from "../../store/user/types";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  Form, Button, Icon, Input,
+} from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
+import Types from '../../store/user/types';
 
 export const Login = ({ history }) => {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(state => state.User.isAuthenticated);
+  const isAuthenticated = useSelector((state) => state.User.isAuthenticated);
   if (isAuthenticated) {
-    history.push("/");
+    history.push('/');
   }
   const login = () => {
     const data = {
@@ -31,12 +33,11 @@ export const Login = ({ history }) => {
       <LoginComponent>
         <h2>Login</h2>
         <Form onSubmit={login}>
-          
           <Form.Field>
             <label>Email Address</label>
             <input
               placeholder="Emaill address"
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </Form.Field>
 
@@ -45,7 +46,7 @@ export const Login = ({ history }) => {
             {passwordVisible && (
               <Input placeholder="Password" icon>
                 <input
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   value={password}
                 />
 
@@ -60,7 +61,7 @@ export const Login = ({ history }) => {
             {!passwordVisible && (
               <Input placeholder="Password" icon>
                 <input
-                  onChange={e => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   value={password}
                 />
