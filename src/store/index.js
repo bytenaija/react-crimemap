@@ -12,12 +12,12 @@ const saga = createSagaMiddleware();
 const middlewares = [];
 middlewares.push(saga);
 
-if (
-  process.env.NODE_ENV !== 'production' &&
-  process.env.NODE_ENV !== 'test'
-) {
+// if (
+//   process.env.NODE_ENV !== 'production' &&
+//   process.env.NODE_ENV !== 'test'
+// ) {
   middlewares.push(logger);
-}
+// }
 
 export const store = createStore(
   reducers,

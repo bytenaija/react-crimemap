@@ -60,6 +60,7 @@ const AddIncidentModal = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    console.log("submitting")
     const incidentDate = active === 'active' ? new Date() : date;
     if (position.coordinates.length < 2) {
       Geocode.setApiKey(googleKey);
@@ -75,6 +76,7 @@ const AddIncidentModal = () => {
       type: type.label,
     };
 
+    console.log(data)
     dispatch({ type: Types.ADD_CRIME, payload: data });
   };
 
