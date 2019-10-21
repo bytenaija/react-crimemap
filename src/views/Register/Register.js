@@ -2,7 +2,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Button, Icon, Input } from 'semantic-ui-react';
+import {
+  Form,
+  Button,
+  Icon,
+  Input,
+  Message,
+} from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Types from '../../store/user/types';
@@ -14,6 +20,7 @@ export const Register = ({ history }) => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const error = useSelector(state => state.User.error);
 
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
@@ -39,6 +46,12 @@ export const Register = ({ history }) => {
       <RegisterComponent>
         <h2>Register</h2>
         <Form onSubmit={register}>
+          {error && (
+            <Message negative>
+              <Message.Header>Login Error</Message.Header>
+              <p>{error}</p>
+            </Message>
+          )}
           <Form.Field>
             <label htmlFor="firstname">
               First name
