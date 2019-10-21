@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -14,18 +15,24 @@ import Types from '../store/crimes/types';
 import { googleKey } from '../config';
 
 const AddIncidentModal = () => {
-  const addNewIncident = useSelector((state) => state.Crimes.addNewIncident);
-  const crimes = useSelector((state) => state.Crimes.crimes);
+  const addNewIncident = useSelector(
+    state => state.Crimes.addNewIncident,
+  );
+  const success = useSelector(state => state.Crimes.success);
+  const crimes = useSelector(state => state.Crimes.crimes);
   const dispatch = useDispatch();
   const [active, setActive] = useState('active');
   const [address, setAddress] = useState('');
-  const [position, setPosition] = useState({ type: 'Point', coordinates: [] });
+  const [position, setPosition] = useState({
+    type: 'Point',
+    coordinates: [],
+  });
   const [type, setType] = useState('');
   const [date, setDate] = useState(new Date());
   const [details, setDetails] = useState('');
 
   const options = crimes.reduce((acc, current) => {
-    if (!acc.find((option) => option.value === current.type)) {
+    if (!acc.find(option => option.value === current.type)) {
       acc.push({ value: current.type, label: current.type });
     }
     return acc;
@@ -35,19 +42,23 @@ const AddIncidentModal = () => {
     dispatch({ type: Types.ADD_NEW_INCIDENT });
   };
 
-  const handleSelect = (selectedAddress) => {
+  const handleSelect = selectedAddress => {
     setAddress(selectedAddress);
     geocodeByAddress(selectedAddress)
-      .then((results) => getLatLng(results[0]))
-      .then((latLng) => {
-        console.log(latLng);
-        setPosition({ type: 'Point', coordinates: [latLng.lng, latLng.lat] });
-        console.log(position);
+      .then(results => getLatLng(results[0]))
+      .then(latLng => {
+        setPosition({
+          type: 'Point',
+          coordinates: [latLng.lng, latLng.lat],
+        });
       })
-      .catch((error) => console.error('Error', error));
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const incidentDate = active === 'active' ? new Date() : date;
     if (position.coordinates.length < 2) {
@@ -67,11 +78,14 @@ const AddIncidentModal = () => {
     dispatch({ type: Types.ADD_CRIME, payload: data });
   };
 
-  const handleOnChange = (e) => {
+  const handleOnChange = e => {
     options.push({ label: e.label, value: e.value });
     setType(e);
   };
 
+  if (success) {
+    dispatch({ type: Types.ADD_NEW_INCIDENT });
+  }
   return (
     <Modal open={addNewIncident} onClose={handleClose}>
       <Modal.Header>Add Incident</Modal.Header>
@@ -80,7 +94,7 @@ const AddIncidentModal = () => {
           <Form.Field>
             <PlacesAutocomplete
               value={address}
-              onChange={(typedAddress) => setAddress(typedAddress)}
+              onChange={typedAddress => setAddress(typedAddress)}
               onSelect={handleSelect}
               id="name"
             >
@@ -99,14 +113,20 @@ const AddIncidentModal = () => {
                   />
                   <div className="autocomplete-dropdown-container">
                     {loading && <div>Loading...</div>}
-                    {suggestions.map((suggestion) => {
+                    {suggestions.map(suggestion => {
                       const className = suggestion.active
                         ? 'suggestion-item--active'
                         : 'suggestion-item';
                       // inline style for demonstration purpose
                       const style = suggestion.active
-                        ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                        : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                        ? {
+                            backgroundColor: '#fafafa',
+                            cursor: 'pointer',
+                          }
+                        : {
+                            backgroundColor: '#ffffff',
+                            cursor: 'pointer',
+                          };
                       return (
                         <div
                           {...getSuggestionItemProps(suggestion, {
@@ -125,31 +145,34 @@ const AddIncidentModal = () => {
             {position.coordinates > 1 && (
               <div>
                 Latitude:
-                {' '}
                 {position.coordinates[1]}
                 Longitude:
-                {' '}
                 {position.coordinates[0]}
               </div>
             )}
           </Form.Field>
           <Form.Field>
-            <label>Incident Type</label>
-            <Creatable
-              multi={false}
-              options={options}
-              onChange={handleOnChange}
-              value={type}
-              showNewOptionAtTop
-            />
+            <label htmlFor="incidentType">
+              Incident Type
+              <Creatable
+                multi={false}
+                options={options}
+                onChange={handleOnChange}
+                value={type}
+                showNewOptionAtTop
+                id="incidentType"
+              />
+            </label>
           </Form.Field>
 
           <Form.Field>
-            <label>Details (Optional)</label>
-            <textarea
-              placeholder="Details"
-              onChange={(e) => setDetails(e.target.value)}
-            />
+            <label htmlFor="details">
+              Details (Optional)
+              <textarea
+                placeholder="Details"
+                onChange={e => setDetails(e.target.value)}
+              />
+            </label>
           </Form.Field>
 
           <Form.Radio
@@ -168,11 +191,13 @@ const AddIncidentModal = () => {
 
           {active === 'historic' && (
             <Form.Field>
-              <label>Date of Incident</label>
-              <Calendar
-                onChange={(selectedDate) => setDate(selectedDate)}
-                value={date}
-              />
+              <label htmlFor="date">
+                Date of Incident
+                <Calendar
+                  onChange={selectedDate => setDate(selectedDate)}
+                  value={date}
+                />
+              </label>
             </Form.Field>
           )}
           <SubmitButton type="submit" color="purple">

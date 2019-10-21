@@ -8,7 +8,7 @@ import UserReducer from './user/reducer';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['Crimes', 'User'],
+  whitelist: ['User'],
 };
 
 const rootReducer = combineReducers({

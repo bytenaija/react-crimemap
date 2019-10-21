@@ -18,7 +18,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
       };
 
     case DataTypes.LOGIN_SUCCESS:
-      return { ...state, user: action.payload, isAuthenticated: true };
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+      };
 
     case DataTypes.LOGIN_FAILUE:
       return {
@@ -38,7 +42,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
       };
 
     case DataTypes.REGISTER_SUCCESS:
-      return { ...state, user: action.payload, isAuthenticated: true };
+      return {
+        ...state,
+        user: action.payload,
+        isAuthenticated: true,
+      };
 
     case DataTypes.REGISTER_FAILUE:
       return {

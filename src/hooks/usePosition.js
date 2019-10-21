@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable import/prefer-default-export */
 import { useState, useEffect } from 'react';
 
@@ -11,8 +12,8 @@ export const usePosition = () => {
       longitude: coords.longitude,
     });
   };
-  const onError = (error) => {
-    setError(error.message);
+  const onError = err => {
+    setError(err.message);
   };
   useEffect(() => {
     const geo = navigator.geolocation;

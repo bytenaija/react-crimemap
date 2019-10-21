@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-export const CrimeList = ({ crime }) => (
+export default ({ crime }) => (
   <CardView>
     <CardContent>
       <h2>

@@ -2,9 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Form, Button, Icon, Input,
-} from 'semantic-ui-react';
+import { Form, Button, Icon, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Types from '../../store/user/types';
@@ -15,7 +13,9 @@ export const Login = ({ history }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.User.isAuthenticated);
+  const isAuthenticated = useSelector(
+    state => state.User.isAuthenticated,
+  );
   if (isAuthenticated) {
     history.push('/');
   }
@@ -34,45 +34,48 @@ export const Login = ({ history }) => {
         <h2>Login</h2>
         <Form onSubmit={login}>
           <Form.Field>
-            <label>Email Address</label>
-            <input
-              placeholder="Emaill address"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <label htmlFor="email">
+              Email Address
+              <input
+                placeholder="Emaill address"
+                onChange={e => setEmail(e.target.value)}
+              />
+            </label>
           </Form.Field>
 
           <Form.Field>
-            <label>Password</label>
-            {passwordVisible && (
-              <Input placeholder="Password" icon>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                />
+            <label htmlFor="password">
+              Password
+              {passwordVisible && (
+                <Input placeholder="Password" icon>
+                  <input
+                    onChange={e => setPassword(e.target.value)}
+                    value={password}
+                  />
 
-                <Icon
-                  name="eye slash"
-                  link
-                  onClick={() => setPasswordVisible(false)}
-                />
-              </Input>
-            )}
+                  <Icon
+                    name="eye slash"
+                    link
+                    onClick={() => setPasswordVisible(false)}
+                  />
+                </Input>
+              )}
+              {!passwordVisible && (
+                <Input placeholder="Password" icon>
+                  <input
+                    onChange={e => setPassword(e.target.value)}
+                    type="password"
+                    value={password}
+                  />
 
-            {!passwordVisible && (
-              <Input placeholder="Password" icon>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  value={password}
-                />
-
-                <Icon
-                  name="eye"
-                  link
-                  onClick={() => setPasswordVisible(true)}
-                />
-              </Input>
-            )}
+                  <Icon
+                    name="eye"
+                    link
+                    onClick={() => setPasswordVisible(true)}
+                  />
+                </Input>
+              )}
+            </label>
           </Form.Field>
 
           <SubmitButton type="submit" color="purple">
@@ -91,11 +94,12 @@ const LoginComponent = styled.div`
   margin: 10rem auto;
   padding: 2rem;
   box-shadow: 1px 1px 10px teal;
+  background: #ffffff;
 `;
 
 const SubmitButton = styled(Button)`
   &&&& {
-    margin: 1rem 1rem;
+    margin: 1rem 0;
     width: 40%;
   }
 `;

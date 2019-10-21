@@ -1,5 +1,5 @@
 import reducer from './reducer';
-import DataTypes, { IDataState } from './types';
+import DataTypes from './types';
 
 describe('StateDataReducer', () => {
   const stateName = 'Lagos';

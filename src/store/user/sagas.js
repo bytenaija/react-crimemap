@@ -1,34 +1,40 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 import DataTypes from './types';
-import { constants } from '../../constants';
+import constants from '../../constants';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'https://crimemap-apiv2.herokuapp.com/api'
-  : 'http://localhost:5009/api';
+const API_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://crimemap-apiv2.herokuapp.com/api'
+    : 'http://localhost:5009/api';
 
-export const login = async (userInfo) => {
-  const response = await axios.post(`${API_BASE_URL}/user/login`, userInfo);
+export const login = async userInfo => {
+  const response = await axios.post(
+    `${API_BASE_URL}/user/login`,
+    userInfo,
+  );
   const { user } = response.data;
-  localStorage.setItem(constants.LOCAL_STORAGE_NAME, JSON.stringify(user));
+  localStorage.setItem(
+    constants.LOCAL_STORAGE_NAME,
+    JSON.stringify(user),
+  );
   return user;
 };
 
-export const register = async (userInfo) => {
-  try {
-    const response = await axios.post(
-      `${API_BASE_URL}/user/register`,
-      userInfo,
+export const register = async userInfo => {
+  const response = await axios.post(
+    `${API_BASE_URL}/user/register`,
+    userInfo,
+  );
+  if (response.data.success) {
+    const { user } = response.data;
+    localStorage.setItem(
+      constants.LOCAL_STORAGE_NAME,
+      JSON.stringify(user),
     );
-    if (response.data.success) {
-      const { user } = response.data;
-      localStorage.setItem(constants.LOCAL_STORAGE_NAME, JSON.stringify(user));
-      return user;
-    }
-    throw response.data.message;
-  } catch (err) {
-    throw err;
+    return user;
   }
+  throw response.data.message;
 };
 
 export function* loginStart(action) {

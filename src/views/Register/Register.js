@@ -2,9 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  Form, Button, Icon, Input,
-} from 'semantic-ui-react';
+import { Form, Button, Icon, Input } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Types from '../../store/user/types';
@@ -18,7 +16,9 @@ export const Register = ({ history }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.User.isAuthenticated);
+  const isAuthenticated = useSelector(
+    state => state.User.isAuthenticated,
+  );
   if (isAuthenticated) {
     history.push('/');
   }
@@ -40,69 +40,79 @@ export const Register = ({ history }) => {
         <h2>Register</h2>
         <Form onSubmit={register}>
           <Form.Field>
-            <label>First name</label>
-            <input
-              placeholder="First name"
-              onChange={(e) => setFirstname(e.target.value)}
-            />
+            <label htmlFor="firstname">
+              First name
+              <input
+                placeholder="First name"
+                onChange={e => setFirstname(e.target.value)}
+              />
+            </label>
           </Form.Field>
 
           <Form.Field>
-            <label>Last name</label>
-            <input
-              placeholder="Lastname"
-              onChange={(e) => setLastname(e.target.value)}
-            />
+            <label htmlFor="lastname">
+              Last name
+              <input
+                placeholder="Lastname"
+                onChange={e => setLastname(e.target.value)}
+              />
+            </label>
           </Form.Field>
 
           <Form.Field>
-            <label>Username</label>
-            <input
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+            <label htmlFor="username">
+              Username
+              <input
+                placeholder="Username"
+                onChange={e => setUsername(e.target.value)}
+              />
+            </label>
           </Form.Field>
 
           <Form.Field>
-            <label>Email Address</label>
-            <input
-              placeholder="Emaill address"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <label htmlFor="email">
+              Email Address
+              <input
+                placeholder="Emaill address"
+                onChange={e => setEmail(e.target.value)}
+              />
+            </label>
           </Form.Field>
 
           <Form.Field>
-            <label>Password</label>
-            {passwordVisible && (
-              <Input placeholder="Password" icon>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                />
+            <label htmlFor="password">
+              Password
+              {passwordVisible && (
+                <Input placeholder="Password" icon>
+                  <input
+                    onChange={e => setPassword(e.target.value)}
+                    value={password}
+                    id="password"
+                  />
 
-                <Icon
-                  name="eye slash"
-                  link
-                  onClick={() => setPasswordVisible(false)}
-                />
-              </Input>
-            )}
+                  <Icon
+                    name="eye slash"
+                    link
+                    onClick={() => setPasswordVisible(false)}
+                  />
+                </Input>
+              )}
+              {!passwordVisible && (
+                <Input placeholder="Password" icon>
+                  <input
+                    onChange={e => setPassword(e.target.value)}
+                    type="password"
+                    value={password}
+                  />
 
-            {!passwordVisible && (
-              <Input placeholder="Password" icon>
-                <input
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  value={password}
-                />
-
-                <Icon
-                  name="eye"
-                  link
-                  onClick={() => setPasswordVisible(true)}
-                />
-              </Input>
-            )}
+                  <Icon
+                    name="eye"
+                    link
+                    onClick={() => setPasswordVisible(true)}
+                  />
+                </Input>
+              )}
+            </label>
           </Form.Field>
 
           <SubmitButton type="submit" color="purple">
@@ -121,11 +131,12 @@ const RegisterComponent = styled.div`
   margin: 10rem auto;
   padding: 2rem;
   box-shadow: 1px 1px 10px teal;
+  background: #ffffff;
 `;
 
 const SubmitButton = styled(Button)`
   &&&& {
-    margin: 1rem 1rem;
+    margin: 1rem 0;
     width: 40%;
   }
 `;

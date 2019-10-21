@@ -1,11 +1,12 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import axios from 'axios';
 import DataTypes from './types';
-import { constants } from '../../constants';
+import constants from '../../constants';
 
-const API_BASE_URL = process.env.NODE_ENV === 'production'
-  ? 'https://crimemap-apiv2.herokuapp.com/api'
-  : 'http://localhost:5009/api';
+const API_BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://crimemap-apiv2.herokuapp.com/api'
+    : 'http://localhost:5009/api';
 
 export const fetchAllData = async () => {
   const response = await axios.get(`${API_BASE_URL}/crimes/`);
@@ -32,7 +33,10 @@ export function* fetchDataStart() {
 
 export function* alertCrime(action) {
   try {
-    yield put({ type: DataTypes.ALERT_DANGER, payload: action.payload });
+    yield put({
+      type: DataTypes.ALERT_DANGER,
+      payload: action.payload,
+    });
   } catch (err) {
     yield put({
       type: DataTypes.GET_CRIMES_FAILURE,
@@ -56,8 +60,10 @@ export function* addNewIncident(action) {
   }
 }
 
-export const addCrime = async (data) => {
-  const user = JSON.parse(localStorage.getItem(constants.LOCAL_STORAGE_NAME));
+export const addCrime = async data => {
+  const user = JSON.parse(
+    localStorage.getItem(constants.LOCAL_STORAGE_NAME),
+  );
   const response = await axios.post(`${API_BASE_URL}/crimes/`, data, {
     headers: {
       Authorization: `Bearer ${user.token}`,
@@ -79,9 +85,35 @@ export function* addCrimeToDatabase(action) {
   }
 }
 
+const getCrime = async id => {
+  const user = JSON.parse(
+    localStorage.getItem(constants.LOCAL_STORAGE_NAME),
+  );
+  const response = await axios.get(`${API_BASE_URL}/crimes/${id}`, {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  });
+  return response.data.crime;
+};
+
+export function* getCrimeStart(action) {
+  try {
+    yield put({ type: DataTypes.GET_CRIME_START });
+    const crime = yield call(getCrime, action.payload);
+    yield put({ type: DataTypes.GET_CRIME_SUCCESS, payload: crime });
+  } catch (err) {
+    yield put({
+      type: DataTypes.GET_CRIME_FAILURE,
+      payload: err,
+    });
+  }
+}
+
 export function* watchGetDataStart() {
   yield takeEvery(DataTypes.GET_CRIMES, fetchDataStart);
   yield takeEvery(DataTypes.ALERT_CRIME, alertCrime);
   yield takeEvery(DataTypes.ADD_NEW_INCIDENT, addNewIncident);
   yield takeEvery(DataTypes.ADD_CRIME, addCrimeToDatabase);
+  yield takeEvery(DataTypes.GET_CRIME, getCrimeStart);
 }

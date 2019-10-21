@@ -6,13 +6,16 @@ import styled from 'styled-components';
 import Types from '../store/crimes/types';
 import UserTypes from '../store/user/types';
 
-const Navbar = (props) => {
+const Navbar = props => {
   const {
     match: { path },
   } = props;
-  const defaultActive = path.substring(path.indexOf('/') + 1) || 'home';
+  const defaultActive =
+    path.substring(path.indexOf('/') + 1) || 'home';
   const [activeItem, setActiveItem] = useState(defaultActive);
-  const isAuthenticated = useSelector((state) => state.User.isAuthenticated);
+  const isAuthenticated = useSelector(
+    state => state.User.isAuthenticated,
+  );
   const dispatch = useDispatch();
   const handleItemClick = (e, { name, url }) => {
     setActiveItem(name);
@@ -22,36 +25,51 @@ const Navbar = (props) => {
   return (
     <div>
       <Menu pointing secondary>
-        <Menu.Item
+        <CustomMenu
           name="home"
           url="/"
           active={activeItem === 'home'}
           onClick={handleItemClick}
         />
-        <Menu.Item
-          name="messages"
-          url="/messages"
-          active={activeItem === 'messages'}
+        <CustomMenu
+          name="incidents"
+          url="/incidents"
+          active={activeItem === 'incidents'}
           onClick={handleItemClick}
         />
-        <Menu.Item
+        <CustomMenu
           url="/friends"
           name="friends"
           active={activeItem === 'friends'}
           onClick={handleItemClick}
         />
         <Menu.Menu position="right">
-          <Menu.Item
+          <CustomMenu
             name="Add Incident"
-            onClick={() => dispatch({ type: Types.ADD_NEW_INCIDENT, payload: 'add' })}
+            onClick={() =>
+              dispatch({
+                type: Types.ADD_NEW_INCIDENT,
+                payload: 'add',
+              })
+            }
           />
           {isAuthenticated && (
-            <Menu.Item
-              url="/logout"
-              name="logout"
-              active={activeItem === 'logout'}
-              onClick={() => dispatch({ type: UserTypes.LOGOUT })}
-            />
+            <>
+              <CustomMenuItem
+                url="/logout"
+                name="logout"
+                active={activeItem === 'logout'}
+                onClick={() => dispatch({ type: UserTypes.LOGOUT })}
+              />
+
+              <CustomMenuItem
+                icon={{ name: 'settings' }}
+                url="/dashboard"
+                name="dashboard"
+                active={activeItem === 'dashboard'}
+                onClick={handleItemClick}
+              />
+            </>
           )}
 
           {!isAuthenticated && (
@@ -63,7 +81,7 @@ const Navbar = (props) => {
                 onClick={handleItemClick}
                 color="purple"
               />
-              <Menu.Item
+              <CustomMenu
                 url="/register"
                 name="register"
                 active={activeItem === 'register'}
@@ -81,6 +99,13 @@ const Navbar = (props) => {
 const CustomMenuItem = styled(Menu.Item)`
   &&&& {
     background-color: purple;
+    color: #ffffff;
+  }
+`;
+
+const CustomMenu = styled(Menu.Item)`
+  &&&& {
+    color: #ffffff;
   }
 `;
 

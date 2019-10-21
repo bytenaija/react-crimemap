@@ -8,13 +8,11 @@ const INITIAL_STATE = {
   recentCrimes: [],
   addNewIncident: false,
   success: false,
+  currentCrime: {},
 };
 
 const crimeReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case DataTypes.GET_CRIMES:
-      return { ...state, loading: true, error: undefined };
-
     case DataTypes.GET_CRIMES_START:
       return { ...state, loading: true, error: undefined };
 
@@ -25,6 +23,24 @@ const crimeReducer = (state = INITIAL_STATE, action) => {
       return { ...state, loading: false, crimes: action.payload };
 
     case DataTypes.GET_CRIMES_FAILURE:
+      return { ...state, loading: false, error: action.error };
+
+    case DataTypes.GET_CRIME_START:
+      return {
+        ...state,
+        loading: true,
+        error: undefined,
+        currentCrime: {},
+      };
+
+    case DataTypes.GET_CRIME_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        currentCrime: action.payload,
+      };
+
+    case DataTypes.GET_CRIME_FAILURE:
       return { ...state, loading: false, error: action.error };
 
     case DataTypes.RECIEVED_RECENT_CRIME:
@@ -43,10 +59,10 @@ const crimeReducer = (state = INITIAL_STATE, action) => {
       };
 
     case DataTypes.SHOW_ADD_MODAL:
-      return { ...state, addNewIncident: true };
+      return { ...state, addNewIncident: true, success: false };
 
     case DataTypes.CLOSE_ADD_MODAL:
-      return { ...state, addNewIncident: false };
+      return { ...state, addNewIncident: false, success: false };
 
     default:
       return state;
