@@ -49,6 +49,7 @@ export class MapContainer extends Component {
   };
 
   render() {
+    const { zoom } = this.props;
     const {
       center: { latitude = 3.873777773, longitude = 4.83737373 },
     } = this.props;
@@ -68,7 +69,7 @@ export class MapContainer extends Component {
                 google={this.props.google}
                 ref={input => (this.ref = input)}
                 onClick={this.onMapClicked}
-                zoom={14}
+                zoom={zoom || 14}
                 initialCenter={{ lat: latitude, lng: longitude }}
                 center={{ lat: latitude, lng: longitude }}
                 style={{ width: '100%', height: '100%' }}
