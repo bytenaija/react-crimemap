@@ -53,10 +53,22 @@ export class MapContainer extends Component {
     const {
       center: { latitude = 3.873777773, longitude = 4.83737373 },
     } = this.props;
+
     const bounds = new this.props.google.maps.LatLngBounds();
-    if (this.props.bounds) {
-      for (let i = 0; i < this.props.bounds.length; i++) {
-        bounds.extend(this.props.bounds[i]);
+
+    if (this.props.crimes.length === 1) {
+      const latLng = new this.props.google.maps.LatLng({
+        lat: latitude,
+        lng: longitude,
+      });
+      bounds.extend(latLng);
+      const crime = this.props.crimes[0];
+      if (crime._id) {
+        const crimeBound = new this.props.google.maps.LatLng({
+          lat: crime.location.coordinates[1],
+          lng: crime.location.coordinates[0],
+        });
+        bounds.extend(crimeBound);
       }
     }
 
@@ -69,10 +81,11 @@ export class MapContainer extends Component {
                 google={this.props.google}
                 ref={input => (this.ref = input)}
                 onClick={this.onMapClicked}
-                zoom={zoom || 14}
+                zoom={zoom || 6}
                 initialCenter={{ lat: latitude, lng: longitude }}
                 center={{ lat: latitude, lng: longitude }}
                 style={{ width: '100%', height: '100%' }}
+                bounds={bounds}
               >
                 <Marker
                   position={{
@@ -97,19 +110,22 @@ export class MapContainer extends Component {
                   draggable={false}
                 />
                 {this.props.crimes.map(crime => {
-                  return (
-                    <Marker
-                      key={crime._id}
-                      onClick={this.onMarkerClick}
-                      type={crime.type}
-                      address={crime.address}
-                      id={crime._id}
-                      position={{
-                        lat: crime.location.coordinates[1],
-                        lng: crime.location.coordinates[0],
-                      }}
-                    />
-                  );
+                  if (crime._id) {
+                    return (
+                      <Marker
+                        key={crime._id}
+                        onClick={this.onMarkerClick}
+                        type={crime.type}
+                        address={crime.address}
+                        id={crime._id}
+                        position={{
+                          lat: crime.location.coordinates[1],
+                          lng: crime.location.coordinates[0],
+                        }}
+                      />
+                    );
+                  }
+                  return null;
                 })}
                 <InfoWindow
                   marker={this.state.activeMarker}

@@ -13,12 +13,16 @@ import Calendar from 'react-calendar';
 import Geocode from 'react-geocode';
 import Types from '../store/crimes/types';
 import { googleKey } from '../config';
+import { withRouter } from 'react-router-dom';
 
-const AddIncidentModal = () => {
+const AddIncidentModal = ({ history }) => {
   const addNewIncident = useSelector(
     state => state.Crimes.addNewIncident,
   );
   const success = useSelector(state => state.Crimes.success);
+  const isAuthenticated = useSelector(
+    state => state.User.isAuthenticated,
+  );
   const crimes = useSelector(state => state.Crimes.crimes);
   const dispatch = useDispatch();
   const [active, setActive] = useState('active');
@@ -30,6 +34,8 @@ const AddIncidentModal = () => {
   const [type, setType] = useState('');
   const [date, setDate] = useState(new Date());
   const [details, setDetails] = useState('');
+
+  
 
   const options = crimes.reduce((acc, current) => {
     if (!acc.find(option => option.value === current.type)) {
@@ -60,7 +66,7 @@ const AddIncidentModal = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    console.log("submitting")
+
     const incidentDate = active === 'active' ? new Date() : date;
     if (position.coordinates.length < 2) {
       Geocode.setApiKey(googleKey);
@@ -76,7 +82,6 @@ const AddIncidentModal = () => {
       type: type.label,
     };
 
-    console.log(data)
     dispatch({ type: Types.ADD_CRIME, payload: data });
   };
 
@@ -84,6 +89,10 @@ const AddIncidentModal = () => {
     options.push({ label: e.label, value: e.value });
     setType(e);
   };
+
+  if (addNewIncident && !isAuthenticated) {
+    history.push('/login');
+  }
 
   if (success) {
     dispatch({ type: Types.ADD_NEW_INCIDENT });
@@ -228,4 +237,4 @@ const SubmitButton = styled(Button)`
   }
 `;
 
-export default AddIncidentModal;
+export default withRouter(AddIncidentModal);

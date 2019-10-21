@@ -63,6 +63,47 @@ export const MapView = () => {
     return `#${'00000'.substring(0, 6 - c.length) + c}`;
   };
 
+  const padZero = (str, len) => {
+    const length = len || 2;
+    const zeros = new Array(length).join('0');
+    return (zeros + str).slice(-length);
+  };
+
+  const invertColor = (hex, bw) => {
+    let cloneHex = hex.slice(0);
+    if (cloneHex.indexOf('#') === 0) {
+      cloneHex = cloneHex.slice(1);
+    }
+    // convert 3-digit cloneHex to 6-digits.
+    if (cloneHex.length === 3) {
+      cloneHex =
+        cloneHex[0] +
+        cloneHex[0] +
+        cloneHex[1] +
+        cloneHex[1] +
+        cloneHex[2] +
+        cloneHex[2];
+    }
+    if (cloneHex.length !== 6) {
+      throw new Error('Invalid HEX color.');
+    }
+    let r = parseInt(cloneHex.slice(0, 2), 16);
+    let g = parseInt(cloneHex.slice(2, 4), 16);
+    let b = parseInt(cloneHex.slice(4, 6), 16);
+    if (bw) {
+      // http://stackoverflow.com/a/3943023/112731
+      return r * 0.299 + g * 0.587 + b * 0.114 > 186
+        ? '#000000'
+        : '#FFFFFF';
+    }
+    // invert color components
+    r = (255 - r).toString(16);
+    g = (255 - g).toString(16);
+    b = (255 - b).toString(16);
+    // pad each with zeros and return
+    return `#${padZero(r)}${padZero(g)}${padZero(b)}`;
+  };
+
   return (
     <MapviewWrapper>
       <Navbar />
@@ -79,7 +120,9 @@ export const MapView = () => {
                     <IncidentThumbnail
                       key={incident._id}
                       incident={incident}
-                      color={intToRGB(hashCode(incident.type))}
+                      color={invertColor(
+                        intToRGB(hashCode(incident.type)),
+                      )}
                     />
                   );
                 })}
@@ -127,6 +170,7 @@ const IncidentWrapper = styled.div`
 
 const IncidentDisplay = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 export default MapView;

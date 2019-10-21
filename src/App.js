@@ -11,6 +11,7 @@ import Home from './views/Home';
 import Login from './views/Login';
 import Register from './views/Register';
 import IncidentView from './views/IncidentView';
+import ProtectedRoute from './helpers/ProtectedRoute';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route
+            <ProtectedRoute
               exact
               path="/incident/:incidentId"
               component={IncidentView}
