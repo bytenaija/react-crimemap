@@ -42,6 +42,7 @@ export function* loginStart(action) {
     yield put({ type: DataTypes.LOGIN_START });
 
     const user = yield call(login, action.payload);
+    console.log("Logins tarrs", user)
 
     yield put({
       type: DataTypes.LOGIN_SUCCESS,
