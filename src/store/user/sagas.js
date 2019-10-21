@@ -14,6 +14,7 @@ export const login = async userInfo => {
     userInfo,
   );
   const { user } = response.data;
+  console.log('Reponse tarrs', response);
   localStorage.setItem(
     constants.LOCAL_STORAGE_NAME,
     JSON.stringify(user),
