@@ -16,7 +16,7 @@ middlewares.push(saga);
 //   process.env.NODE_ENV !== 'production' &&
 //   process.env.NODE_ENV !== 'test'
 // ) {
-  middlewares.push(logger);
+middlewares.push(logger);
 // }
 
 export const store = createStore(
