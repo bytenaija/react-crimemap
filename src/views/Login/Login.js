@@ -2,7 +2,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { Form, Button, Icon, Input } from 'semantic-ui-react';
+import {
+  Form,
+  Button,
+  Icon,
+  Input,
+  Message,
+} from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Types from '../../store/user/types';
@@ -35,7 +41,12 @@ export const Login = ({ history }) => {
       <LoginComponent>
         <h2>Login</h2>
         <Form onSubmit={login}>
-          {error && <div>{error}</div>}
+          {error && (
+            <Message negative>
+              <Message.Header>Login Error</Message.Header>
+              <p>{error}</p>
+            </Message>
+          )}
           <Form.Field>
             <label htmlFor="email">
               Email Address
