@@ -4,12 +4,12 @@ import Types from '../../store/crimes/types';
 
 const IncidentView = ({ match }) => {
   const dispatch = useDispatch();
-  const crime = useSelector(state => state.Crimes.currentCrime);
+  const incident = useSelector(state => state.Crimes.currentCrime);
   useEffect(() => {
     const { incidentId } = match.params;
     dispatch({ type: Types.GET_CRIME, payload: incidentId });
   }, [dispatch, match]);
 
-  return <div>Incident View</div>;
+  return <div>{incident.type}</div>;
 };
 export default IncidentView;
