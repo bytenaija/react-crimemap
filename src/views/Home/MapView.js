@@ -33,7 +33,7 @@ export const MapView = () => {
   useEffect(() => {
     const socket = socketIOClient(BASE_URL);
 
-    if (latitude && longitude) {
+    if (latitude && longitude && user) {
       dispatch({ type: Types.ALERT_CRIME, payload: [] });
       socket.emit('update-location', {
         userId: user.id,
