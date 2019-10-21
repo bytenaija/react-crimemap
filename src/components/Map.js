@@ -118,7 +118,9 @@ export class MapContainer extends Component {
                   <div className="info">
                     <h6>{this.state.selectedPlace.type}</h6>
                     <h6>{this.state.selectedPlace.address}</h6>
-                    <a href={`/crime/${this.state.selectedPlace.id}`}>
+                    <a
+                      href={`/incident/${this.state.selectedPlace.id}`}
+                    >
                       View Details
                     </a>
                   </div>
