@@ -13,13 +13,16 @@ export const login = async userInfo => {
     `${API_BASE_URL}/user/login`,
     userInfo,
   );
-  const { user } = response.data;
+  const { user, success, message } = response.data;
   console.log('Reponse tarrs', response);
-  localStorage.setItem(
-    constants.LOCAL_STORAGE_NAME,
-    JSON.stringify(user),
-  );
-  return user;
+  if (success) {
+    localStorage.setItem(
+      constants.LOCAL_STORAGE_NAME,
+      JSON.stringify(user),
+    );
+    return user;
+  }
+  throw message;
 };
 
 export const register = async userInfo => {
@@ -43,7 +46,7 @@ export function* loginStart(action) {
     yield put({ type: DataTypes.LOGIN_START });
 
     const user = yield call(login, action.payload);
-    console.log("Logins tarrs", user)
+    console.log('Logins tarrs', user);
 
     yield put({
       type: DataTypes.LOGIN_SUCCESS,
