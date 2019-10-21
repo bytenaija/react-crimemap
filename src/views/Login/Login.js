@@ -16,6 +16,8 @@ export const Login = ({ history }) => {
   const isAuthenticated = useSelector(
     state => state.User.isAuthenticated,
   );
+
+  const error = useSelector(state => state.User.error);
   if (isAuthenticated) {
     history.push('/');
   }
@@ -33,6 +35,7 @@ export const Login = ({ history }) => {
       <LoginComponent>
         <h2>Login</h2>
         <Form onSubmit={login}>
+          {error && <div>{error}</div>}
           <Form.Field>
             <label htmlFor="email">
               Email Address
