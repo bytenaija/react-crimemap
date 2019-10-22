@@ -11,6 +11,13 @@ const INITIAL_STATE = {
   currentCrime: {},
 };
 
+const vote = (state, payload) => {
+  return {
+    ...state,
+    currentCrime: payload,
+  };
+};
+
 const crimeReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case DataTypes.GET_CRIMES_START:
@@ -63,6 +70,12 @@ const crimeReducer = (state = INITIAL_STATE, action) => {
 
     case DataTypes.CLOSE_ADD_MODAL:
       return { ...state, addNewIncident: false, success: false };
+
+    case DataTypes.VOTE_SUCCESS:
+      return vote(state, action.payload);
+
+    case DataTypes.ADD_COMMENT_SUCCESS:
+      return vote(state, action.payload);
 
     default:
       return state;

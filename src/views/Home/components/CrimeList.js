@@ -1,24 +1,51 @@
 import React from 'react';
-import { Card, CardContent } from 'semantic-ui-react';
+import { Card, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
+import { MetaCount } from './Incident';
 
-export default ({ crime }) => (
-  <CardView>
-    <CardContent>
-      <h2>
-        Type:
-        {crime.type}
-      </h2>
-    </CardContent>
-  </CardView>
-);
+export default ({ crime }) => {
+  const downVotes = crime.votes.filter(vote => vote.vote === -1);
+  const upVotes = crime.votes.filter(vote => vote.vote === 1);
+  const { comments = [] } = crime;
+  return (
+    <CardView>
+      <CardContent href={`/incident/${crime._id}`}>
+        <h2>{crime.type}</h2>
+        <h4>{crime.address}</h4>
+        <MetaCount>
+          <span>
+            <Icon name="thumbs down" />
+            <span>{downVotes.length}</span>
+          </span>
+          <span>
+            <Icon name="eye" />
+            <span>{crime.viewCount.length}</span>
+          </span>
 
+          <span>
+            <Icon name="thumbs up" />
+            <span>{upVotes.length}</span>
+          </span>
+
+          <span>
+            <Icon name="comments" />
+            <span>{comments.length}</span>
+          </span>
+        </MetaCount>
+      </CardContent>
+    </CardView>
+  );
+};
+
+const CardContent = styled.a`
+  width: 100%;
+  color: black;
+`;
 const CardView = styled(Card)`
   &&&& {
-    width: 30%;
-    min-width: 30%;
-    height: 100px;
-    box-shadow: 1px 1px 10px black;
+    width: 100%;
     padding: 0.5rem;
+    border-radius: 0;
+   
   }
 `;

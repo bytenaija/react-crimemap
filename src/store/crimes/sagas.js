@@ -110,10 +110,83 @@ export function* getCrimeStart(action) {
   }
 }
 
+const addVote = async payload => {
+  const user = JSON.parse(
+    localStorage.getItem(constants.LOCAL_STORAGE_NAME),
+  );
+  const { incidentId, vote } = payload;
+  const response = await axios.get(
+    `${API_BASE_URL}/crimes/${incidentId}/${vote}`,
+    {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    },
+  );
+  if (response.data.success) {
+    return response.data.crime;
+  }
+  throw response.data.message;
+};
+
+export function* voteStart(action) {
+  try {
+    yield put({ type: DataTypes.VOTE_START });
+    const crime = yield call(addVote, action.payload);
+    yield put({
+      type: DataTypes.VOTE_SUCCESS,
+      payload: crime,
+    });
+  } catch (err) {
+    yield put({
+      type: DataTypes.VOTE_FAILURE,
+      payload: err,
+    });
+  }
+}
+
+const addComment = async payload => {
+  const user = JSON.parse(
+    localStorage.getItem(constants.LOCAL_STORAGE_NAME),
+  );
+  const { incidentId, comment } = payload;
+  const response = await axios.post(
+    `${API_BASE_URL}/crimes/${incidentId}/comment`,
+    { comment },
+    {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    },
+  );
+  if (response.data.success) {
+    return response.data.crime;
+  }
+  throw response.data.message;
+};
+
+export function* commentStart(action) {
+  try {
+    yield put({ type: DataTypes.ADD_COMMENT_START });
+    const crime = yield call(addComment, action.payload);
+    yield put({
+      type: DataTypes.ADD_COMMENT_SUCCESS,
+      payload: crime,
+    });
+  } catch (err) {
+    yield put({
+      type: DataTypes.ADD_COMMENT_FAILURE,
+      payload: err,
+    });
+  }
+}
+
 export function* watchGetDataStart() {
   yield takeEvery(DataTypes.GET_CRIMES, fetchDataStart);
   yield takeEvery(DataTypes.ALERT_CRIME, alertCrime);
   yield takeEvery(DataTypes.ADD_NEW_INCIDENT, addNewIncident);
   yield takeEvery(DataTypes.ADD_CRIME, addCrimeToDatabase);
   yield takeEvery(DataTypes.GET_CRIME, getCrimeStart);
+  yield takeEvery(DataTypes.VOTE, voteStart);
+  yield takeEvery(DataTypes.ADD_COMMENT, commentStart);
 }

@@ -4,13 +4,13 @@ import React, { useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { usePosition } from '../../hooks/usePosition';
 import Types from '../../store/crimes/types';
 import Map from '../../components/Map';
-import CrimeList from './components/CrimeList';
+import { usePosition } from '../../hooks/usePosition';
 import Navbar from '../../components/Navbar';
 import AddIncidentModal from '../../components/AddIncidentModal';
 import IncidentThumbnail from './components/Incident';
+import CrimeList from './components/CrimeList';
 
 export const MapView = () => {
   const BASE_URL =
@@ -28,7 +28,25 @@ export const MapView = () => {
     .sort((a, b) => {
       return new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1;
     })
-    .slice(0, 9);
+    .slice(0, 5);
+
+  const mostCommentedCrimes = crimes
+    .sort((a, b) => {
+      return a.comments.length < b.comments.length ? 1 : -1;
+    })
+    .slice(0, 5);
+
+  const mostViewedCrimes = crimes
+    .sort((a, b) => {
+      return a.views.length < b.views.length ? 1 : -1;
+    })
+    .slice(0, 5);
+
+  const mostVotedCrimes = crimes
+    .sort((a, b) => {
+      return a.views.length < b.views.length ? 1 : -1;
+    })
+    .slice(0, 5);
 
   useEffect(() => {
     const socket = socketIOClient(BASE_URL);
@@ -134,9 +152,25 @@ export const MapView = () => {
           </RecentIncidentsMapWrapper>
           <div>
             <MapviewInnerWrapper>
-              {crimes.map(crime => (
-                <CrimeList crime={crime} key={crime._id} />
-              ))}
+              <IncidentMetaDisplay color="teal">
+                <h3>Most Viewed Incidents</h3>
+                {mostViewedCrimes.map(crime => (
+                  <CrimeList key={crime._id} crime={crime} />
+                ))}
+              </IncidentMetaDisplay>
+              <IncidentMetaDisplay color="purple">
+                <h3>Most Commented Incidents</h3>
+                {mostCommentedCrimes.map(crime => (
+                  <CrimeList key={crime._id} crime={crime} />
+                ))}
+              </IncidentMetaDisplay>
+
+              <IncidentMetaDisplay color="black">
+                <h3>Most Voted Incidents</h3>
+                {mostVotedCrimes.map(crime => (
+                  <CrimeList key={crime._id} crime={crime} />
+                ))}
+              </IncidentMetaDisplay>
             </MapviewInnerWrapper>
           </div>
         </>
@@ -150,6 +184,7 @@ export const MapView = () => {
 const MapviewWrapper = styled.div``;
 const MapviewInnerWrapper = styled.div`
   padding: 1rem;
+  display: flex;
 `;
 
 const RecentIncidentsMapWrapper = styled.div`
@@ -165,12 +200,21 @@ const IncidentWrapper = styled.div`
   padding: 0 0.5rem;
   width: 25%;
   background: #ffffff;
-  height: 699.5px;
+  max-height: 699.5px;
+  overflow: hidden;
 `;
 
 const IncidentDisplay = styled.div`
   display: flex;
   flex-wrap: wrap;
+`;
+
+const IncidentMetaDisplay = styled.div`
+  padding: 2rem;
+  background: #ffffff;
+  width: 33.33%;
+  margin: 2rem;
+  box-shadow: 1px 1px 10px ${props => props.color};
 `;
 
 export default MapView;
