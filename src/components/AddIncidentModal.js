@@ -11,9 +11,9 @@ import PlacesAutocomplete, {
 } from 'react-places-autocomplete';
 import Calendar from 'react-calendar';
 import Geocode from 'react-geocode';
+import { withRouter } from 'react-router-dom';
 import Types from '../store/crimes/types';
 import { googleKey } from '../config';
-import { withRouter } from 'react-router-dom';
 
 const AddIncidentModal = ({ history }) => {
   const addNewIncident = useSelector(
@@ -34,8 +34,6 @@ const AddIncidentModal = ({ history }) => {
   const [type, setType] = useState('');
   const [date, setDate] = useState(new Date());
   const [details, setDetails] = useState('');
-
-  
 
   const options = crimes.reduce((acc, current) => {
     if (!acc.find(option => option.value === current.type)) {

@@ -13,7 +13,6 @@ import { withRouter } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Types from '../../store/user/types';
 
-
 export const Register = ({ history }) => {
   const [username, setUsername] = useState('');
   const [firstname, setFirstname] = useState('');

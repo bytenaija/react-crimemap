@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import AddReward from './components/AddReward';
 import { Button } from 'semantic-ui-react';
+import AddReward from './components/AddReward';
 import Navbar from '../../components/Navbar';
 import Reward from './components/Reward';
 import Types from '../../store/rewards/types';
@@ -10,11 +10,11 @@ import Types from '../../store/rewards/types';
 const Rewards = () => {
   const [isOpen, setAddRewardOpen] = useState(false);
   const rewards = useSelector(state => state.Reward.rewards);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch({ type: Types.GET_REWARD });
-  }, [])
+  }, []);
 
   const handleClose = () => {
     setAddRewardOpen(false);

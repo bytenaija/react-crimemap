@@ -6,7 +6,6 @@ import CrimeReducer from './crimes/reducer';
 import UserReducer from './user/reducer';
 import rewardReducer from './rewards/reducer';
 
-
 const persistConfig = {
   key: 'root',
   storage,
@@ -16,7 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   Crimes: CrimeReducer,
   User: UserReducer,
-  Reward: rewardReducer
+  Reward: rewardReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer);

@@ -30,17 +30,14 @@ export const addReward = async rewardInfo => {
 };
 
 export const getRewards = async () => {
-   const user = JSON.parse(
+  const user = JSON.parse(
     localStorage.getItem(constants.LOCAL_STORAGE_NAME),
   );
-  const response = await axios.get(
-    `${ API_BASE_URL }/rewards/`,
-    {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
+  const response = await axios.get(`${API_BASE_URL}/rewards/`, {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
     },
-  );
+  });
   if (response.data.success) {
     const { rewards } = response.data;
     return rewards;
@@ -69,7 +66,7 @@ export function* addRewardStart(action) {
 
 export function* getRewardStart(action) {
   try {
-    yield put({ type: DataTypes.GET_REWARD_START});
+    yield put({ type: DataTypes.GET_REWARD_START });
 
     const rewards = yield call(getRewards, action.payload);
 
@@ -85,28 +82,25 @@ export function* getRewardStart(action) {
   }
 }
 
-const getCurrentReward = async (id) => {
+const getCurrentReward = async id => {
   const user = JSON.parse(
     localStorage.getItem(constants.LOCAL_STORAGE_NAME),
   );
-  const response = await axios.get(
-    `${ API_BASE_URL }/rewards/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
+  const response = await axios.get(`${API_BASE_URL}/rewards/${id}`, {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
     },
-  );
+  });
   if (response.data.success) {
     const { reward } = response.data;
     return reward;
   }
   throw response.data.message;
-}
+};
 
 export function* getCurrentRewardStart(action) {
   try {
-    yield put({ type: DataTypes.GET_CURRENT_REWARD_START});
+    yield put({ type: DataTypes.GET_CURRENT_REWARD_START });
 
     const rewards = yield call(getCurrentReward, action.payload);
 
@@ -125,5 +119,8 @@ export function* getCurrentRewardStart(action) {
 export function* watchRewardSaga() {
   yield takeEvery(DataTypes.REWARD_CREATE, addRewardStart);
   yield takeEvery(DataTypes.GET_REWARD, getRewardStart);
-  yield takeEvery(DataTypes.GET_CURRENT_REWARD, getCurrentRewardStart);
+  yield takeEvery(
+    DataTypes.GET_CURRENT_REWARD,
+    getCurrentRewardStart,
+  );
 }
