@@ -32,19 +32,26 @@ export const MapView = () => {
 
   const mostCommentedCrimes = crimes
     .sort((a, b) => {
-      return a.comments.length < b.comments.length ? 1 : -1;
+      if (a.comments && b.comments)
+        return a.comments.length < b.comments.length ? 1 : -1;
+      return -1;
     })
     .slice(0, 5);
 
   const mostViewedCrimes = crimes
     .sort((a, b) => {
-      return a.views.length < b.views.length ? 1 : -1;
+      if (a.views && b.views) {
+        return a.views.length < b.views.length ? 1 : -1;
+      }
+      return -1;
     })
     .slice(0, 5);
 
   const mostVotedCrimes = crimes
     .sort((a, b) => {
-      return a.views.length < b.views.length ? 1 : -1;
+      if (a.votes && b.votes)
+        return a.votes.length < b.votes.length ? 1 : -1;
+      return -1;
     })
     .slice(0, 5);
 
