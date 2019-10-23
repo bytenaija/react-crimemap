@@ -12,6 +12,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import IncidentView from './views/IncidentView';
 import ProtectedRoute from './helpers/ProtectedRoute';
+import Rewards from './views/Rewards';
 
 function App() {
   return (
@@ -24,6 +25,11 @@ function App() {
               exact
               path="/incident/:incidentId"
               component={IncidentView}
+            />
+            <ProtectedRoute
+              exact
+              path="/rewards"
+              component={Rewards}
             />
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />

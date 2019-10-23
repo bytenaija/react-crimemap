@@ -32,9 +32,9 @@ const Navbar = props => {
           onClick={handleItemClick}
         />
         <CustomMenu
-          name="incidents"
-          url="/incidents"
-          active={activeItem === 'incidents'}
+          name="rewards"
+          url="/rewards"
+          active={activeItem === 'rewards'}
           onClick={handleItemClick}
         />
         <CustomMenu

@@ -22,6 +22,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         user: action.payload,
         isAuthenticated: true,
+        error: undefined,
       };
 
     case DataTypes.LOGIN_FAILUE:

@@ -44,7 +44,7 @@ export const Login = ({ history }) => {
           {error && (
             <Message negative>
               <Message.Header>Login Error</Message.Header>
-              <p>{error}</p>
+              <p>{error.message}</p>
             </Message>
           )}
           <Form.Field>
