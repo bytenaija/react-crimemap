@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 
 const IncidentThumbnail = ({ incident, color }) => {
-  const downVotes = incident.votes.filter(vote => vote.vote === -1);
-  const upVotes = incident.votes.filter(vote => vote.vote === 1);
+  let downVotes = [];
+  let upVotes = [];
+  if (incident.votes) {
+    downVotes = incident.votes.filter(vote => vote.vote === -1);
+    upVotes = incident.votes.filter(vote => vote.vote === 1);
+  }
   const { comments = [] } = incident;
   return (
     <IncidentWrapper color={color} href={`/incident/${incident._id}`}>

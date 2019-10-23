@@ -4,8 +4,12 @@ import styled from 'styled-components';
 import { MetaCount } from './Incident';
 
 export default ({ crime }) => {
-  const downVotes = crime.votes.filter(vote => vote.vote === -1);
-  const upVotes = crime.votes.filter(vote => vote.vote === 1);
+  let downVotes = [];
+  let upVotes = [];
+  if (crime.votes) {
+    downVotes = crime.votes.filter(vote => vote.vote === -1);
+    upVotes = crime.votes.filter(vote => vote.vote === 1);
+  }
   const { comments = [] } = crime;
   return (
     <CardView>
